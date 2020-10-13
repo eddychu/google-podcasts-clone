@@ -1,5 +1,4 @@
 {
-  "homepage": "https://eddychu.github.io/google-podcasts-clone",
   "name": "google-podcasts-clone",
   "version": "0.1.0",
   "private": true,
@@ -30,8 +29,7 @@
     "build": "run-s env:prod build:css react-scripts:build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "postbuild": "react-snap"
   },
   "eslintConfig": {
     "extends": "react-app"

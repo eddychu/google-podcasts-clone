@@ -82,6 +82,7 @@ export default function Player({
         // onChange={handleProgressInput}
         step={1}
         onInput={handleProgressInput}
+        onChange={handleProgressInput}
         max={duration - 5 || 0}
       ></input>
       <div className="flex">

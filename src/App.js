@@ -27,13 +27,12 @@ function App() {
   }, [feeds]);
 
   return (
-    <Router>
+    <Router basename="">
       <div className="flex w-full items-center p-0 m-0 flex-col items-center font-sans text-gray-800 box-border">
         <Drawer open={isDrawerOpen} onClose={toggleDrawer} />
         <Head onMenuClicked={toggleDrawer} />
-
-        <Switch>
-          <div className="flex flex-wrap mt-2" style={{ width: "600px" }}>
+        <div className="flex flex-wrap mt-2" style={{ width: "600px" }}>
+          <Switch>
             <Route exact path="/feed/:id">
               <Podcast player={player} feeds={feeds} />
             </Route>
@@ -43,9 +42,8 @@ function App() {
             <Route exact path="/">
               <Explore feeds={feeds} subscriptions={subscriptions} />
             </Route>
-          </div>
-        </Switch>
-
+          </Switch>
+        </div>
         {player.episode && <Player {...player} />}
       </div>
     </Router>
