@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
-import "./tailwind.output.css";
+import "./styles/index.css";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

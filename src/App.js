@@ -20,7 +20,7 @@ function App() {
   };
   useEffect(() => {
     dispatch(getAllFeeds());
-  });
+  }, []);
   useEffect(() => {
     const subs = feeds.filter((feed) => feed.sub);
     setSubscriptions(subs);
