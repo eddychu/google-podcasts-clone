@@ -4,7 +4,7 @@ import DateTime from "luxon/src/datetime.js";
 import { useDispatch } from "react-redux";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { play, pause, unpause, togglePlay } from "../reducers/playerReducer";
+import { play, pause, unpause } from "../reducers/playerReducer";
 
 import { FaPlay } from "react-icons/fa";
 
@@ -28,6 +28,7 @@ export default function Episodes({ episodes, player }) {
   };
 
   const handleStart = (episode) => {
+    console.log(episode);
     dispatch(play(episode));
   };
 
@@ -51,7 +52,7 @@ export default function Episodes({ episodes, player }) {
       <div className="mt-2">
         <div className="w-24 justify-center items-center flex text-sm font-bold text-gray-700 p-1  border-2 border-solid border-gray-500 rounded-full ">
           <div onClick={handleTogglePlay}>
-            {player.playing && player.episode == episode ? (
+            {player.playing && player.episode.link === episode.link ? (
               <div className="w-6 h-6">
                 <CircularProgressbar
                   value={player.progress}

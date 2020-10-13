@@ -19,7 +19,7 @@ const PlayerSlice = createSlice({
       return { ...state, episode: action.payload };
     },
     pause(state, action) {
-      return { ...state, playing: false };
+      return { ...state, playing: false, progress: action.payload };
     },
     unpause(state, action) {
       return { ...state, playing: true };
@@ -37,6 +37,10 @@ const PlayerSlice = createSlice({
     changeProgress(state, action) {
       return { ...state, progress: action.payload };
     },
+
+    setDuration(state, action) {
+      return { ...state, duration: action.payload };
+    },
   },
 });
 
@@ -48,6 +52,7 @@ export const {
   changeVolume,
   toggleMute,
   changeProgress,
+  setDuration,
 } = PlayerSlice.actions;
 
 export default PlayerSlice.reducer;

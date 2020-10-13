@@ -15,13 +15,11 @@ export default function Drawer({ open, onClose }) {
   };
 
   useEffect(() => {
-    if (open) {
-      document.addEventListener("click", handleClickOutside, false);
-      return () => {
-        document.removeEventListener("click", handleClickOutside, false);
-      };
-    }
-  }, [open]);
+    document.addEventListener("click", handleClickOutside, false);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, false);
+    };
+  });
 
   return (
     <div
@@ -31,8 +29,8 @@ export default function Drawer({ open, onClose }) {
         getClassName()
       }
     >
-      <div className="flex justify-between">
-        <h1 className="text-xl pl-4 pb-6 mt-4 font-extrabold">EchoPod</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-base pl-4 pb-6 mt-4 font-extrabold">EchoPod</h1>
         <span className="text-base mr-4 pb-6 mt-4 font-extrabold cursor-pointer">
           <FaTimes onClick={onClose} />
         </span>
@@ -40,14 +38,14 @@ export default function Drawer({ open, onClose }) {
 
       <hr />
       <ul className="list-reset">
-        <li className="border-solid border-b-2">
+        <li className="border-solid border-b">
           <Link to="/">
             <div className="block p-4 text-grey-darker font-bold hover:bg-gray-300 text-xs sm:text-xs md:text-sm lg:text-base">
               Explore
             </div>
           </Link>
         </li>
-        <li className="border-solid border-b-2">
+        <li className="border-solid border-b">
           <Link to="/subscriptions">
             <div className="block p-4 text-grey-darker font-bold hover:bg-gray-300 text-xs sm:text-xs md:text-sm lg:text-base">
               Subscriptions

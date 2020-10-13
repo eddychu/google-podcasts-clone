@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAll, getFeedById } from "../api/feed-api";
+import { getAll } from "../api/feed-api";
 
 const FeedsSlice = createSlice({
   name: "feeds",
@@ -9,21 +9,27 @@ const FeedsSlice = createSlice({
       return getAll();
     },
     toggleSubscribe(state, action) {
-      console.log("test");
-      console.log([...state]);
       return state.map((feed) => {
-        if (feed._id == action.payload) {
+        if (feed._id === action.payload) {
           return { ...feed, sub: !feed.sub };
         } else {
           return feed;
         }
       });
     },
-
-    toggleSort(state, action) {},
+    changeSort(state, action) {
+      console.log(action.payload);
+      return state.map((feed) => {
+        if (feed._id === action.payload.id) {
+          return { ...feed, sort: action.payload.sort };
+        } else {
+          return feed;
+        }
+      });
+    },
   },
 });
 
-export const { getAllFeeds, toggleSubscribe } = FeedsSlice.actions;
+export const { getAllFeeds, toggleSubscribe, changeSort } = FeedsSlice.actions;
 
 export default FeedsSlice.reducer;

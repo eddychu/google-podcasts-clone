@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import ReactPlayer from "react-player";
 import {
@@ -11,14 +11,14 @@ import {
   FaVolumeUp,
 } from "react-icons/fa";
 import {
-  play,
   pause,
   unpause,
   changeVolume,
   toggleMute,
   changeProgress,
+  setDuration,
 } from "../reducers/playerReducer";
-import { trimString } from "../utils/helpers";
+import { trimString, formatDuration } from "../utils/helpers";
 
 export default function Player({
   episode,
@@ -30,59 +30,48 @@ export default function Player({
 }) {
   const playerRef = useRef(null);
   const dispatch = useDispatch();
-  const handleProgress = (state) => {
-    dispatch(
-      changeProgress(
-        (state.playedSeconds / playerRef.current.getDuration()) * 100
-      )
-    );
-    console.log(progress);
-  };
-
   const handleProgressInput = (e) => {
-    playerRef.current.seekTo(
-      (e.target.value / 100) * playerRef.current.getDuration()
-    );
+    dispatch(changeProgress(e.target.value));
   };
 
   const handleDuration = (duration) => {
-    console.log(duration);
+    dispatch(setDuration(duration));
   };
 
   const handlePause = () => {
-    dispatch(pause());
+    dispatch(pause(playerRef.current.getCurrentTime()));
   };
 
   const handlePlay = () => {
     dispatch(unpause());
   };
 
-  const togglePlay = () => {
-    if (playing) {
-      handlePause();
-    } else {
-      handlePlay();
-    }
-  };
-
   const handleVolumeChange = (e) => {
     dispatch(changeVolume(parseFloat(e.target.value)));
   };
+
   const handleBackward = () => {
-    playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10 || 0);
+    const currentTime = playerRef.current.getCurrentTime();
+    dispatch(changeProgress(currentTime - 10 || 0));
   };
 
   const handleForward = () => {
-    let newPos = playerRef.current.getCurrentTime() + 10;
-    if (newPos > playerRef.current.getDuration()) {
-      newPos = playerRef.current.getDuration();
+    let newTime = playerRef.current.getCurrentTime() + 10;
+    if (newTime > duration) {
+      newTime = duration;
     }
-    playerRef.current.seekTo(newPos);
+    dispatch(changeProgress(newTime));
   };
 
   const handleToggleMute = () => {
     dispatch(toggleMute());
   };
+
+  useEffect(() => {
+    if (playerRef.current && duration) {
+      playerRef.current.seekTo(progress);
+    }
+  }, [progress, duration]);
 
   return (
     <div className="w-full flex flex-col fixed flex inset-x-0 bottom-0 bg-gray-300  h-16">
@@ -90,26 +79,32 @@ export default function Player({
         type="range"
         className="h-1 bg-pink-200 w-full"
         value={progress}
-        onChange={handleProgressInput}
-        max={100}
+        // onChange={handleProgressInput}
+        step={1}
+        onInput={handleProgressInput}
+        max={duration - 5 || 0}
       ></input>
       <div className="flex">
         <div className="flex w-64 h-16 items-center pl-2 gap-1 rounded">
-          <img src={episode.image?.url} className="w-8 h-8" />
+          <img
+            src={episode.image?.url}
+            className="w-8 h-8"
+            alt={episode.title}
+          />
           <p className="text-xs">{trimString(episode.title, 20)}</p>
         </div>
         <div className="w-full flex justify-center gap-8 items-center">
           <FaUndo onClick={handleBackward} />
 
           {playing ? (
-            <FaPause onClick={togglePlay} />
+            <FaPause onClick={handlePause} />
           ) : (
-            <FaPlay onClick={togglePlay} />
+            <FaPlay onClick={handlePlay} />
           )}
 
           <FaRedo onClick={handleForward} />
         </div>
-        <div className="items-center mr-4 flex items-center">
+        <div className="items-center mr-4 flex">
           <div className="w-8">
             {volume < 0.01 || mute ? (
               <FaVolumeOff onClick={handleToggleMute} />
@@ -126,7 +121,12 @@ export default function Player({
             max={1}
             step={0.01}
           />
+          <span className="ml-2">
+            {formatDuration(Math.floor(progress))}/
+            {formatDuration(Math.floor(duration))}
+          </span>
         </div>
+
         <ReactPlayer
           ref={playerRef}
           className="hidden"
@@ -136,7 +136,6 @@ export default function Player({
           volume={volume}
           onPlay={handlePlay}
           onPause={handlePause}
-          onProgress={handleProgress}
           onDuration={handleDuration}
         />
       </div>

@@ -22,8 +22,12 @@ export default function Albums({ items }) {
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <FaBackward className="cursor-pointer" onClick={moveLeft} />
+    <div className="flex items-center justify-center w-full relative">
+      {currentPage > 0 && (
+        <div className="cursor-pointer absolute left-0 z-10 p-2 bg-gray-200 rounded-full opacity-75">
+          <FaBackward onClick={moveLeft} />
+        </div>
+      )}
       <div className="flex flex-no-wrap overflow-x-hidden justify-start w-full">
         {items.map((item) => (
           <div
@@ -38,6 +42,7 @@ export default function Albums({ items }) {
           >
             <Link to={{ pathname: "/feed/" + item._id }}>
               <img
+                alt={item.meta.title}
                 src={item.meta.image.url}
                 className="rounded-md w-24 h-24 "
               />
@@ -46,7 +51,11 @@ export default function Albums({ items }) {
         ))}
       </div>
 
-      <FaForward className="cursor-pointer" onClick={moveRight} />
+      {currentPage < pages - 1 && (
+        <div className="cursor-pointer absolute right-0 z-10 p-2 bg-gray-200 rounded-full opacity-75">
+          <FaForward onClick={moveRight} />
+        </div>
+      )}
     </div>
   );
 }
