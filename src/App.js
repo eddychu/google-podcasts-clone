@@ -27,7 +27,7 @@ function App() {
   }, [feeds]);
 
   return (
-    <Router basename="">
+    <Router>
       <div className="flex w-full items-center p-0 m-0 flex-col items-center font-sans text-gray-800 box-border">
         <Drawer open={isDrawerOpen} onClose={toggleDrawer} />
         <Head onMenuClicked={toggleDrawer} />
